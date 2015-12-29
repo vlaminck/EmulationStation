@@ -60,6 +60,13 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::changeFavoriteState, this));
 	mMenu.addRow(row);
 
+	// hide/show
+	row.elements.clear();
+	bool isHidden = file->metadata.get("hidden") == "1";
+	row.addElement(std::make_shared<TextComponent>(mWindow, isHidden ? "SHOW GAME" : "HIDE GAME", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::changeHiddenState, this));
+	mMenu.addRow(row);
+
 	// center the menu
 	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
 	mMenu.setPosition((mSize.x() - mMenu.getSize().x()) / 2, (mSize.y() - mMenu.getSize().y()) / 2);
@@ -97,6 +104,28 @@ void GuiGamelistOptions::changeFavoriteState()
 	delete this;
 }
 
+// Switches the "hidden" state of the currently selected game.
+void GuiGamelistOptions::changeHiddenState()
+{
+	// currently selected game
+	FileData* file = getGamelist()->getCursor();
+	// switch the value.
+	if (file != NULL)
+	{
+		if (file->metadata.get("hidden") == "0")
+		{
+			file->metadata.set("hidden", "1");
+		}
+		else
+		{
+			file->metadata.set("hidden", "0");
+		}
+	}
+
+	// closes the dialog
+	delete this;
+}
+
 void GuiGamelistOptions::openMetaDataEd()
 {
 	// open metadata editor
@@ -120,7 +149,7 @@ void GuiGamelistOptions::jumpToLetter()
 
 	// this is a really shitty way to get a list of files
 	const std::vector<FileData*>& files = gamelist->getCursor()->getParent()->getChildren();
-	
+
 	long min = 0;
 	long max = files.size() - 1;
 	long mid = 0;

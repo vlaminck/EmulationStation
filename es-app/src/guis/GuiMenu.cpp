@@ -162,6 +162,12 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 				});
 			}
 
+			// show hidden
+			auto show_hidden = std::make_shared<SwitchComponent>(mWindow);
+			show_hidden->setState(Settings::getInstance()->getBool("ShowHidden"));
+			s->addWithLabel("SHOW HIDDEN", show_hidden);
+			s->addSaveFunc([show_hidden] { Settings::getInstance()->setBool("ShowHidden", show_hidden->getState()); });
+
 			mWindow->pushGui(s);
 	});
 
