@@ -1,3 +1,5 @@
+_Branch Note_: This branch is what is used to build EmulationStation on the retropie at ST
+
 EmulationStation
 ================
 
