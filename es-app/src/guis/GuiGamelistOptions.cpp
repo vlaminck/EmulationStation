@@ -1,5 +1,7 @@
+#include "Gamelist.h"
 #include "GuiGamelistOptions.h"
 #include "GuiMetaDataEd.h"
+#include "Settings.h"
 #include "views/gamelist/IGameListView.h"
 #include "views/ViewController.h"
 
@@ -100,6 +102,12 @@ void GuiGamelistOptions::changeFavoriteState()
 		}
 	}
 
+	// save metadata
+	if(!Settings::getInstance()->getBool("IgnoreGamelist"))
+	{
+		updateGamelist(mSystem);
+	}
+
 	// closes the dialog
 	delete this;
 }
@@ -120,6 +128,12 @@ void GuiGamelistOptions::changeHiddenState()
 		{
 			file->metadata.set("hidden", "0");
 		}
+	}
+
+	// save metadata
+	if(!Settings::getInstance()->getBool("IgnoreGamelist"))
+	{
+		updateGamelist(mSystem);
 	}
 
 	// closes the dialog
