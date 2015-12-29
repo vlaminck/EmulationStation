@@ -55,7 +55,14 @@ void BasicGameListView::populateList(const std::vector<FileData*>& files)
 	// full list of games with repeated favorites
 	for(auto it = files.begin(); it != files.end(); it++)
 	{
-		mList.add((*it)->getName(), *it, ((*it)->getType() == FOLDER));
+		if ((*it)->metadata.get("favorite") == "1")
+		{
+			mList.add("* " + (*it)->getName(), *it, ((*it)->getType() == FOLDER)); // FIXME Folder as favorite ?
+		}
+		else
+		{
+			mList.add((*it)->getName(), *it, ((*it)->getType() == FOLDER));
+		}
 	}
 }
 
