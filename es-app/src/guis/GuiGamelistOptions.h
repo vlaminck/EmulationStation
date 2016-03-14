@@ -16,6 +16,8 @@ public:
 
 private:
 	void openMetaDataEd();
+	void changeFavoriteState();
+	void changeHiddenState();
 	void jumpToLetter();
 	
 	MenuComponent mMenu;

@@ -47,9 +47,38 @@ void BasicGameListView::populateList(const std::vector<FileData*>& files)
 
 	mHeaderText.setText(files.at(0)->getSystem()->getFullName());
 
+	bool showHidden = Settings::getInstance()->getBool("ShowHidden");
+
+	// The TextListComponent would be able to insert at a specific position,
+	// but the cost of this operation could be seriously huge.
+	// This naive implemention of doing a first pass in the list is used instead.
 	for(auto it = files.begin(); it != files.end(); it++)
 	{
-		mList.add((*it)->getName(), *it, ((*it)->getType() == FOLDER));
+		if ((*it)->metadata.get("favorite") == "1")
+		{
+			mList.add("* " + (*it)->getName(), *it, ((*it)->getType() == FOLDER)); // FIXME Folder as favorite ?
+		}
+	}
+
+	// full list of games with repeated favorites
+	for(auto it = files.begin(); it != files.end(); it++)
+	{
+		if ((*it)->metadata.get("favorite") == "1")
+		{
+			mList.add("* " + (*it)->getName(), *it, ((*it)->getType() == FOLDER)); // FIXME Folder as favorite ?
+		}
+		else if ((*it)->metadata.get("hidden") == "1")
+		{
+			if(showHidden) {
+				mList.add("- " + (*it)->getName(), *it, ((*it)->getType() == FOLDER));
+			} else {
+				// skip this hidden file
+			}
+		}
+		else
+		{
+			mList.add((*it)->getName(), *it, ((*it)->getType() == FOLDER));
+		}
 	}
 }
 

@@ -18,7 +18,8 @@ std::vector<const char*> settings_dont_save = boost::assign::list_of
 	("Windowed")
 	("VSync")
 	("HideConsole")
-	("IgnoreGamelist");
+	("IgnoreGamelist")
+	("ShowHidden");
 
 Settings::Settings()
 {
@@ -57,6 +58,7 @@ void Settings::setDefaults()
 	mBoolMap["ShowHelpPrompts"] = true;
 	mBoolMap["ScrapeRatings"] = true;
 	mBoolMap["IgnoreGamelist"] = false;
+	mBoolMap["ShowHidden"] = false;
 	mBoolMap["HideConsole"] = true;
 	mBoolMap["QuickSystemSelect"] = true;
 
